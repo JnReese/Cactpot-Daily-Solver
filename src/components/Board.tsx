@@ -25,14 +25,7 @@ export default function BasicTextFields() {
   const [duped, setDuped] = useState<Boolean>(false);
   const [validChar, setValidChar] = useState<Boolean>(true);
 
-  console.log(validChar);
-
   useEffect(() => {
-    let compareNumbers = Object.values(usedNumbers).filter((el) => el);
-    if (Object.values(usedNumbers).every((r) => elements.indexOf(r) >= 0)) {
-      setValidChar(false);
-    }
-
     if (
       Object.values(usedNumbers).filter((el) => el !== "").length !==
       new Set(Object.values(usedNumbers).filter((el) => el !== "")).size
@@ -40,7 +33,17 @@ export default function BasicTextFields() {
       setDuped(true);
     } else {
       setDuped(false);
+    }
+  }, [indexActive]);
+
+  useEffect(() => {
+    let compareValidElements = Object.values(usedNumbers).every(
+      (r) => elements.toString().indexOf(r) >= 0
+    );
+    if (compareValidElements) {
       setValidChar(true);
+    } else {
+      setValidChar(false);
     }
   }, [indexActive]);
 
@@ -87,6 +90,15 @@ export default function BasicTextFields() {
           <Stack spacing={1} alignItems="center">
             <Stack direction="row" spacing={1}>
               <Chip label="Duplicate Number" color="error" />
+            </Stack>
+          </Stack>
+        </div>
+      ) : null}
+      {!validChar ? (
+        <div className="error__container">
+          <Stack spacing={1} alignItems="center">
+            <Stack direction="row" spacing={1}>
+              <Chip label="Invalid Input" color="error" />
             </Stack>
           </Stack>
         </div>
