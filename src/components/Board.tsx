@@ -5,9 +5,11 @@ import { useState, useEffect } from "react";
 import * as React from "react";
 import Chip from "@mui/material/Chip";
 import Stack from "@mui/material/Stack";
+import CollumnsInfo from "../components/CollumnsInfo";
+import RowsInfo from "../components/RowsInfo";
+import DiagonalInfo from "../components/DiagonalInfo";
 
-interface UseNumberValue {
-  0?: number;
+export interface UseNumberValue {
   1?: number;
   2?: number;
   3?: number;
@@ -16,6 +18,8 @@ interface UseNumberValue {
   6?: number;
   7?: number;
   8?: number;
+  9?: number;
+  ""?: 0;
 }
 
 export default function BasicTextFields() {
@@ -26,9 +30,10 @@ export default function BasicTextFields() {
   const [validChar, setValidChar] = useState<Boolean>(true);
 
   useEffect(() => {
+    console.log(usedNumbers);
     if (
-      Object.values(usedNumbers).filter((el) => el !== "").length !==
-      new Set(Object.values(usedNumbers).filter((el) => el !== "")).size
+      Object.values(usedNumbers).filter((el) => el !== 0).length !==
+      new Set(Object.values(usedNumbers).filter((el) => el !== 0)).size
     ) {
       setDuped(true);
     } else {
@@ -37,9 +42,10 @@ export default function BasicTextFields() {
   }, [indexActive]);
 
   useEffect(() => {
-    let compareValidElements = Object.values(usedNumbers).every(
-      (r) => elements.toString().indexOf(r) >= 0
-    );
+    let compareValidElements = Object.values(usedNumbers)
+      .filter((el) => el !== 0)
+      .every((r) => elements.toString().indexOf(r) >= 0);
+
     if (compareValidElements) {
       setValidChar(true);
     } else {
@@ -51,18 +57,22 @@ export default function BasicTextFields() {
     event: React.ChangeEvent<HTMLInputElement>,
     idx: number
   ) => {
-    const numberInput = event.target.value;
-
-    setUsedNumbers({ ...usedNumbers, [idx]: numberInput });
+    const numberInput = parseInt(event.target.value);
+    setIndexActive([...indexActive, idx]);
     if (numberInput) {
-      setIndexActive([...indexActive, idx]);
+      setUsedNumbers({ ...usedNumbers, [idx]: numberInput });
     } else {
       setIndexActive(indexActive.filter((el) => el !== idx));
+      console.log(indexActive);
+      setUsedNumbers({ ...usedNumbers, [idx]: 0 });
     }
   };
 
   return (
     <div className="board__Container">
+      <CollumnsInfo usedNumbers={usedNumbers} indexActive={indexActive} />
+      <RowsInfo usedNumbers={usedNumbers} indexActive={indexActive} />
+      <DiagonalInfo usedNumbers={usedNumbers} indexActive={indexActive} />
       <div className="input__container">
         <Box
           className="parent"
