@@ -5,7 +5,7 @@ interface PassedProps {
 }
 
 const DiagonalInfo = ({ usedNumbers, indexActive }: PassedProps) => {
-  return <div>CollumnsInfo</div>;
+  return <div>DiagonalInfo</div>;
 };
 
 export default DiagonalInfo;

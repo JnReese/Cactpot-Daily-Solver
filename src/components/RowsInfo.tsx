@@ -5,7 +5,7 @@ interface PassedProps {
 }
 
 const RowsInfo = ({ usedNumbers, indexActive }: PassedProps) => {
-  return <div>CollumnsInfo</div>;
+  return <div>RowsInfo</div>;
 };
 
 export default RowsInfo;

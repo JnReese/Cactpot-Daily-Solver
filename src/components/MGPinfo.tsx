@@ -29,10 +29,10 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 function createData(rowSum: number, mgp: number) {
-  return { rowSum, mgp };
+  return { mgp, rowSum };
 }
 const rows = [
-  createData(10000, 6),
+  createData(6, 10000),
   createData(7, 36),
   createData(8, 720),
   createData(9, 360),
@@ -60,8 +60,8 @@ export default function CustomizedTables() {
         <Table sx={{ minWidth: 350 }} aria-label="customized table">
           <TableHead>
             <TableRow>
-              <StyledTableCell>MGP</StyledTableCell>
-              <StyledTableCell align="right">Row Sum</StyledTableCell>
+              <StyledTableCell>Row Sum</StyledTableCell>
+              <StyledTableCell align="right">MGP</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
