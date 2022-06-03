@@ -6,95 +6,180 @@ import * as React from "react";
 import Chip from "@mui/material/Chip";
 import Stack from "@mui/material/Stack";
 import CollumnsInfo from "../components/CollumnsInfo";
-import RowsInfo from "../components/RowsInfo";
-import DiagonalInfo from "../components/DiagonalInfo";
-import possibleRowOutcomes from "../possibleRowOutcomes";
 
 export interface UseNumberValue {
-  1?: number;
-  2?: number;
-  3?: number;
-  4?: number;
-  5?: number;
-  6?: number;
-  7?: number;
-  8?: number;
-  9?: number;
-  0?: 0;
+  1: number;
+  2: number;
+  3: number;
+  4: number;
+  5: number;
+  6: number;
+  7: number;
+  8: number;
+  9: number;
+  0: number;
 }
 
-interface ActivateCollumn {
-  collumnOne?: boolean;
-  collumnTwo?: boolean;
-  collumnThree?: boolean;
+export interface ElementsInActive {
+  c1: number;
+  c2: number;
+  c3: number;
+  r1: number;
+  r2: number;
+  r3: number;
+  d1: number;
+  d2: number;
 }
 
 export default function BasicTextFields() {
   const elements = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-  const [usedNumbers, setUsedNumbers] = useState<UseNumberValue>({});
+  const [usedNumbers, setUsedNumbers] = useState<UseNumberValue>({
+    1: 0,
+    2: 0,
+    3: 0,
+    4: 0,
+    5: 0,
+    6: 0,
+    7: 0,
+    8: 0,
+    9: 0,
+    0: 0,
+  });
   const [indexActive, setIndexActive] = useState<number[]>([]);
   const [duped, setDuped] = useState<Boolean>(false);
   const [validChar, setValidChar] = useState<Boolean>(true);
-  const [collumnActivate, setCollumnActivate] = useState<ActivateCollumn>({});
+  const [currentNumber, setCurrentNumber] = useState<number | null>(null);
+  const [elementsPerActiveSection, setElementsPerActiveSection] = useState<ElementsInActive>({
+    c1: 0,
+    c2: 0,
+    c3: 0,
+    r1: 0,
+    r2: 0,
+    r3: 0,
+    d1: 0,
+    d2: 0,
+  });
 
-  useEffect(() => {
-    if (
-      Object.values(usedNumbers).filter((el) => el !== "").length !==
-      new Set(Object.values(usedNumbers).filter((el) => el !== "")).size
-    ) {
-      setDuped(true);
-    } else {
-      setDuped(false);
-    }
-  }, [indexActive]);
-
-  useEffect(() => {
-    let compareValidElements = Object.values(usedNumbers)
-      .filter((el) => el !== 0)
-      .every((r) => elements.toString().indexOf(r) >= 0);
-
-    if (compareValidElements) {
-      setValidChar(true);
-    } else {
-      setValidChar(false);
-    }
-  }, [indexActive]);
-
-  const handleChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    idx: number
-  ) => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>, idx: number) => {
+    setCurrentNumber(parseInt(event.target.value));
     const numberInput = parseInt(event.target.value);
-    const nullNumberInput = event.target.value;
-    const bestPossibleOutcome = numberInput;
-    if (idx === 0 || idx === 2 || idx === 6 || idx === 8) {
-      if (numberInput) {
-        let userInputCornerNumber = numberInput;
-      }
-      console.log("corner input");
-    }
-    if (idx === 4) {
-      console.log("middle input");
-    }
-    if (idx === 1 || idx === 3 || idx === 5 || idx === 7) {
-      console.log("inner input");
-    }
+    const validNum = event.target.value;
 
-    setIndexActive([...indexActive, idx]);
     if (numberInput) {
+      setIndexActive([...indexActive, idx]);
       setUsedNumbers({ ...usedNumbers, [idx]: numberInput });
-    } else {
+      if (idx === 0 || idx === 3 || idx === 6) {
+        setElementsPerActiveSection({
+          ...elementsPerActiveSection,
+          c1: (elementsPerActiveSection.c1 += 1),
+        });
+      }
+      if (idx === 1 || idx === 4 || idx === 7) {
+        setElementsPerActiveSection({
+          ...elementsPerActiveSection,
+          c2: (elementsPerActiveSection.c2 += 1),
+        });
+      }
+      if (idx === 2 || idx === 5 || idx === 8) {
+        setElementsPerActiveSection({
+          ...elementsPerActiveSection,
+          c3: (elementsPerActiveSection.c3 += 1),
+        });
+      }
+      if (idx === 0 || idx === 1 || idx === 2) {
+        setElementsPerActiveSection({
+          ...elementsPerActiveSection,
+          r1: (elementsPerActiveSection.r1 += 1),
+        });
+      }
+      if (idx === 3 || idx === 4 || idx === 5) {
+        setElementsPerActiveSection({
+          ...elementsPerActiveSection,
+          r2: (elementsPerActiveSection.r2 += 1),
+        });
+      }
+      if (idx === 6 || idx === 7 || idx === 8) {
+        setElementsPerActiveSection({
+          ...elementsPerActiveSection,
+          r3: (elementsPerActiveSection.r3 += 1),
+        });
+      }
+      if (idx === 0 || idx === 4 || idx === 8) {
+        setElementsPerActiveSection({
+          ...elementsPerActiveSection,
+          d1: (elementsPerActiveSection.d1 += 1),
+        });
+      }
+      if (idx === 2 || idx === 4 || idx === 6) {
+        setElementsPerActiveSection({
+          ...elementsPerActiveSection,
+          d2: (elementsPerActiveSection.d2 += 1),
+        });
+      }
+    }
+    if (!validNum) {
+      if (idx === 0 || idx === 3 || idx === 6) {
+        setElementsPerActiveSection({
+          ...elementsPerActiveSection,
+          c1: (elementsPerActiveSection.c1 -= 1),
+        });
+      }
+      if (idx === 1 || idx === 4 || idx === 7) {
+        setElementsPerActiveSection({
+          ...elementsPerActiveSection,
+          c2: (elementsPerActiveSection.c2 -= 1),
+        });
+      }
+      if (idx === 2 || idx === 5 || idx === 8) {
+        setElementsPerActiveSection({
+          ...elementsPerActiveSection,
+          c3: (elementsPerActiveSection.c3 -= 1),
+        });
+      }
+      if (idx === 0 || idx === 1 || idx === 2) {
+        setElementsPerActiveSection({
+          ...elementsPerActiveSection,
+          r1: (elementsPerActiveSection.r1 -= 1),
+        });
+      }
+      if (idx === 3 || idx === 4 || idx === 5) {
+        setElementsPerActiveSection({
+          ...elementsPerActiveSection,
+          r2: (elementsPerActiveSection.r2 -= 1),
+        });
+      }
+      if (idx === 6 || idx === 7 || idx === 8) {
+        setElementsPerActiveSection({
+          ...elementsPerActiveSection,
+          r3: (elementsPerActiveSection.r3 -= 1),
+        });
+      }
+      if (idx === 0 || idx === 4 || idx === 8) {
+        setElementsPerActiveSection({
+          ...elementsPerActiveSection,
+          d1: (elementsPerActiveSection.d1 -= 1),
+        });
+      }
+      if (idx === 2 || idx === 4 || idx === 6) {
+        setElementsPerActiveSection({
+          ...elementsPerActiveSection,
+          d2: (elementsPerActiveSection.d2 -= 1),
+        });
+      }
       setIndexActive(indexActive.filter((el) => el !== idx));
-
-      setUsedNumbers({ ...usedNumbers, [idx]: nullNumberInput });
+      setUsedNumbers({ ...usedNumbers, [idx]: validNum });
     }
   };
 
   return (
     <div className="board__Container">
-      <CollumnsInfo usedNumbers={usedNumbers} indexActive={indexActive} />
-      <RowsInfo usedNumbers={usedNumbers} indexActive={indexActive} />
-      <DiagonalInfo usedNumbers={usedNumbers} indexActive={indexActive} />
+      <CollumnsInfo
+        usedNumbers={usedNumbers}
+        indexActive={indexActive}
+        currentNumber={currentNumber}
+        elementsPerActiveSection={elementsPerActiveSection}
+      />
+
       <div className="input__container">
         <Box
           className="parent"

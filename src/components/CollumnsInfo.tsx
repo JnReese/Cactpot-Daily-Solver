@@ -6,6 +6,7 @@ import Avatar from "@mui/material/Avatar";
 import { GiReceiveMoney } from "react-icons/gi";
 import { UseNumberValue } from "../components/Board";
 import { useState, useEffect } from "react";
+import { ElementsInActive } from "../components/Board";
 import "../components/CollumnsInfoCss.css";
 import {
   outcomes,
@@ -20,80 +21,85 @@ import {
 interface PassedProps {
   usedNumbers: UseNumberValue;
   indexActive: number[];
+  currentNumber: number | null;
+  elementsPerActiveSection: ElementsInActive;
 }
 
 interface ActivateCollumns {
-  1?: Boolean;
-  2?: Boolean;
-  3?: Boolean;
+  1?: number[];
+  2?: number[];
+  3?: number[];
 }
 
-interface ElementsInCollumn {
-  1?: number;
-  2?: number;
-  3?: number;
-}
-
-const CollumnsInfo = ({ usedNumbers, indexActive }: PassedProps) => {
+const CollumnsInfo = ({ usedNumbers, indexActive, currentNumber, elementsPerActiveSection }: PassedProps) => {
   const [activeCollumns, setActiveCollumns] = useState<ActivateCollumns>({});
-  const [activeElementsInCollumn, setActiveElementsInCollumn] =
-    useState<ElementsInCollumn>({});
-  const collumnNames = ["Collumn One", "Collumn Two", "Collumn Three"];
-  const collumnIndexValues = [0, 2, 3, 4, 5, 6, 7, 8];
-  const collumnObj = {
+  const [allCalculationsActive, setAllCalculationsActive] = useState<string[]>([]);
+
+  const allNames = [
+    "Collumn One",
+    "Collumn Two",
+    "Collumn Three",
+    "Row One",
+    "Row Two",
+    "Row Three",
+    "Diagonal One",
+    "Diagonal Two",
+  ];
+
+  console.log(usedNumbers);
+
+  const indexCollections = {
     collumnOne: [0, 3, 6],
     collumnTwo: [1, 4, 7],
     collumnThree: [2, 5, 8],
+    diagonalOne: [0, 4, 8],
+    diagonalTwo: [2, 4, 6],
+    rowOne: [0, 1, 2],
+    rowTwo: [3, 4, 5],
+    rowThree: [6, 7, 8],
   };
 
-  useEffect(() => {}, [indexActive]);
+  const calcuateMGPOutput = () => {
+    if (activeCollumns) {
+      if (Object.values(usedNumbers)) {
+        return bestOutcomeForSingleNumber(usedNumbers[0]);
+      }
+    }
+  };
 
-  console.log(collumnIndexValues);
+  useEffect(() => {
+    const filteredKeys = Object.keys(indexCollections).filter((key) => {
+      return indexActive.some((i) => indexCollections[key as keyof typeof indexCollections].includes(i));
+    });
+    setAllCalculationsActive(filteredKeys);
+  }, [indexActive]);
 
   return (
-    <div className="collumns__container">
-      {collumnNames.map((names, idx: number) => (
-        <List
-          key={idx}
-          sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
-        >
-          <ListItem>
-            <ListItemAvatar>
-              <Avatar>
-                <GiReceiveMoney />
-              </Avatar>
-            </ListItemAvatar>
-            <ListItemText
-              primary={names}
-              secondary={
-                activeCollumns
-                  ? bestOutcomeForSingleNumber(usedNumbers[0])?.toString()
-                  : null
-              }
-            />
-          </ListItem>
-        </List>
-      ))}
+    <div className="output__container">
+      <div className="diagonal__container">
+        {allNames.map((names, idx: number) => (
+          <List key={idx} sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}>
+            <ListItem>
+              <ListItemAvatar>
+                <Avatar>
+                  <GiReceiveMoney />
+                </Avatar>
+              </ListItemAvatar>
+              <ListItemText primary={names} secondary={activeCollumns ? calcuateMGPOutput() : null} />
+            </ListItem>
+          </List>
+        ))}
+      </div>
     </div>
   );
 };
 
 export default CollumnsInfo;
 
-/* if (
-  indexActive.some((r) => Object.values(collumnObj.collumnOne).includes(r))
-) {
-  setActiveCollumns({ ...activeCollumns, 1: true });
-}
-if (
-  indexActive.some((r) => Object.values(collumnObj.collumnTwo).includes(r))
-) {
-  setActiveCollumns({ ...activeCollumns, 2: true });
-}
-if (
-  indexActive.some((r) =>
-    Object.values(collumnObj.collumnThree).includes(r)
-  )
-) {
-  setActiveCollumns({ ...activeCollumns, 3: true });
-} */
+/* 
+if (currentNumber !== null)
+      setActiveCollumns({
+        ...activeCollumns,
+        ...{ 1: [...(activeCollumns?.["1"] ?? []), currentNumber] },
+      });
+    console.log(activeCollumns); */

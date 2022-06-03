@@ -3,3 +3,15 @@
   flex-direction: row;
   justify-content: center;
 }
+
+.rows__container {
+  display: flex;
+  flex-direction: column;
+}
+
+.diagonal__container {
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  justify-content: space-between;
+}
