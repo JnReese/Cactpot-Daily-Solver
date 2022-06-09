@@ -1,14 +1,14 @@
-import Board from "../src/components/Board";
-import Arrows from "./components/Arrows";
-import MGPinfo from "./components/MGPinfo";
 import "./App.css";
+import OutComes from "./components/OutComes";
+import InputBoard from "./components/InputBoard";
+import DataTable from "./components/DataTable";
 
 function App() {
   return (
     <div className="App">
-      <Board></Board>
-      <Arrows />
-      <MGPinfo />
+      <OutComes />
+      <InputBoard />
+      <DataTable />
     </div>
   );
 }
