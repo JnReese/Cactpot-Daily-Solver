@@ -46,8 +46,6 @@ const CollumnsInfo = ({ usedNumbers, indexActive, currentNumber, elementsPerActi
     "Diagonal Two",
   ];
 
-  console.log(usedNumbers);
-
   const indexCollections = {
     collumnOne: [0, 3, 6],
     collumnTwo: [1, 4, 7],
@@ -95,11 +93,3 @@ const CollumnsInfo = ({ usedNumbers, indexActive, currentNumber, elementsPerActi
 };
 
 export default CollumnsInfo;
-
-/* 
-if (currentNumber !== null)
-      setActiveCollumns({
-        ...activeCollumns,
-        ...{ 1: [...(activeCollumns?.["1"] ?? []), currentNumber] },
-      });
-    console.log(activeCollumns); */
