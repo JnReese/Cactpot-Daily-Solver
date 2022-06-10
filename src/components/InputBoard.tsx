@@ -41,10 +41,10 @@ export default function BasicSelect() {
     return array.filter((el) => el == item).length;
   };
 
-  const handleChange = (event: SelectChangeEvent, idx: number) => {
+  const handleChange = (event: SelectChangeEvent<number | "">, idx: number) => {
     const inputValue = event.target.value;
     setNumberInput({ ...numberInput, [idx]: Number(inputValue) });
-    if (countInArray(Object.values(numberInput), parseInt(inputValue))) {
+    if (countInArray(Object.values(numberInput), Number(inputValue))) {
       setDupe(true);
     } else {
       setDupe(false);
@@ -61,7 +61,7 @@ export default function BasicSelect() {
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={(numberInput[idx as keyof CellInputs] as any) ?? ""}
+                value={numberInput[idx as keyof typeof numberInput] ?? ""}
                 label="Number"
                 onChange={(event) => handleChange(event, idx)}
               >

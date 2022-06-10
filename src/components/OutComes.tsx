@@ -1,6 +1,7 @@
 import Chip from "@mui/material/Chip";
 import Stack from "@mui/material/Stack";
 import styled from "styled-components";
+import IconChips from "../components/BestPossibleOutcome";
 
 export default function ColorChips() {
   const titles = [
@@ -29,6 +30,7 @@ export default function ColorChips() {
           </Stack>
         ))}
       </Layout>
+      <IconChips />
     </Container>
   );
 }
@@ -40,10 +42,12 @@ const Layout = styled.div`
   grid-template-rows: repeat(3, 1fr);
   grid-column-gap: 20px;
   grid-row-gap: 25px;
+  margin: 0 auto;
 `;
 
 const Container = styled.div`
   display: flex;
   justify-content: center;
+  flex-direction: column;
   margin-top: 1rem;
 `;
